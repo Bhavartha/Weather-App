@@ -12,10 +12,10 @@
     </div>
     <template v-if="weatherData">
       <div class="col text-white text-center">
-        <div class="text-h4 text-weight-light">Mumbai</div>
-        <div class="text-weight-light">Rain</div>
+        <div class="text-h4 text-weight-light">{{weatherData.name}}</div>
+        <div class="text-weight-light">{{weatherData.weather[0].main}}</div>
         <div class="q-my-lg relative-position">
-          <span class="text-weight-thin text-h1">26</span>
+          <span class="text-weight-thin text-h1">{{weatherData.main.temp}}</span>
           <span class="text-weight-thin text-h3 degree">&deg;</span>
         </div>
       </div>
@@ -45,20 +45,28 @@ export default {
   name: "PageIndex",
   data() {
     return {
+      apiKey: "b0933f380b15f4b81937b10828267f50",
       search: "",
       weatherData: null,
-      lat:null,
-      lon:null,
+      lat: null,
+      lon: null,
     };
   },
-  methods:{
-    getLocation(){
-      navigator.geolocation.getCurrentPosition(position=>{
-        this.lat = position.coords.latitude
-        this.lon = position.coords.longitude
-      })
-    }
-  }
+  methods: {
+    getLocation() {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.lat = position.coords.latitude;
+        this.lon = position.coords.longitude;
+        this.getWeatherByCoordinates();
+      });
+    },
+    async getWeatherByCoordinates() {
+      const res = await this.$axios.get(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${this.lat}&lon=${this.lon}&appid=${this.apiKey}&units=metric`
+      );
+      this.weatherData = res.data;
+    },
+  },
 };
 </script>
 
