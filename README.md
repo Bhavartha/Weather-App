@@ -1,4 +1,4 @@
-# Weather App (weather)
+# [Weather App](https://weather-sz.netlify.app)
 
 A Quasar Framework app
 
